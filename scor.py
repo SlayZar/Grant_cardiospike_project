@@ -100,4 +100,5 @@ if st.sidebar.button('Анализ важности переменных мод�
 if st.sidebar.button('Анализ качества модели'):
     st.markdown('#### Точность модели на train-val выборках:')  
     st.image("https://i.ibb.co/YdmqfKn/catboost.png", width=500)
+    st.write("Maximum value F1 = 0.8421 when treshold = 0.393")
     st.image("https://i.ibb.co/RD5DNfG/treshold.png", width=500)
