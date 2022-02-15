@@ -75,7 +75,10 @@ else:
     file_buffer = st.file_uploader(label = 'Выберите датасет')
     if file_buffer:
         try:
-            df = pd.read_csv(file_buffer, encoding=None)
+            if '.csv' in file_buffer:
+                df = pd.read_csv(file_buffer, encoding=None)
+            elif '.xls' in file_buffer:
+                df = pd.read_excel(file_buffer)
             if 'id' not in df.columns and df[df['time']==0].shape[0] == 1:
                 df['id'] = 1
         except:
