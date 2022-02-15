@@ -84,16 +84,15 @@ if options == 'Тестовый датасет':
 else:
     file_buffer = st.file_uploader(label = 'Выберите датасет')
     if file_buffer:
-#         try:
-        if '.csv' in file_buffer.name:
-            df = pd.read_csv(file_buffer, encoding=None)
-        elif '.xls' in file_buffer.name:
-            df = pd.read_excel(file_buffer,engine='openpyxl')
-            st.write('b')
-        if 'id' not in df.columns and df[df['time']==0].shape[0] == 1:
-            df['id'] = 1
-#         except:
-#             st.write('Файл некорректен!')
+        try:
+            if '.csv' in file_buffer.name:
+                df = pd.read_csv(file_buffer, encoding=None)
+            elif '.xls' in file_buffer.name:
+                df = pd.read_excel(file_buffer,engine='openpyxl')
+            if 'id' not in df.columns and df[df['time']==0].shape[0] == 1:
+                df['id'] = 1
+        except:
+            st.write('Файл некорректен!')
         assert df.shape[1] in [2,3,4]
         st.markdown('#### Файл корректный!')  
         st.write('Пример данных из файла:')
