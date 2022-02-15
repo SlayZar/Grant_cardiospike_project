@@ -76,6 +76,8 @@ else:
     if file_buffer:
         try:
             df = pd.read_csv(file_buffer, encoding=None)
+            if 'id' not in df.columns and df[df['time']==0].shape[0] == 1:
+                df['id'] = 1
         except:
             st.write('Файл некорректен!')
         assert df.shape[1] == 3 or df.shape[1] == 4
@@ -86,8 +88,8 @@ else:
         st.markdown('### Скоринг завершён успешно!')
 
         st.markdown(get_table_download_link(res), unsafe_allow_html=True)
-		
-	
+
+
         st.write('Доля класса 1 = ', round(100*res[target_col_name].mean(), 1), ' %')
         
         slider_feats(res, 'id', target_col_name)
