@@ -80,7 +80,7 @@ else:
                 df['id'] = 1
         except:
             st.write('Файл некорректен!')
-        assert df.shape[1] == 3 or df.shape[1] == 4
+        assert df.shape[1] in [2,3,4]
         st.markdown('#### Файл корректный!')  
         st.write('Пример данных из файла:')
         st.dataframe(df.sample(3))  
