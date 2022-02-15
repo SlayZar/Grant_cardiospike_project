@@ -83,6 +83,8 @@ if options == 'Тестовый датасет':
     slider_feats(res, 'id', target_col_name)
 else:
     file_buffer = st.file_uploader(label = 'Выберите датасет')
+    st.write('Формат датасета: csv или xlsx')
+    st.write('Колонки датасета: time, x, id (опционально для случая с более одной ритмограммой)')
     if file_buffer:
         try:
             if '.csv' in file_buffer.name:
