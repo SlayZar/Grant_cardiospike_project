@@ -41,10 +41,20 @@ def slider_feats(train, feat, target_col_name):
     df_samp = train[train['id']==ids].copy()
     df_samp.set_index('time', inplace=True)
     df_samp['Аномалия ритма сердца'] = df_samp['x'] * df_samp[target_col_name].replace(0, np.nan)
+    nums = df_samp.loc[(df_samp[target_col_name].shift(1)==0) & (df_samp[target_col_name]==1)].shape[0]
     try:
         st.line_chart(df_samp[['x', 'Аномалия ритма сердца']])
     except:
         pass
+    if nums == 1:
+        st.subheader(f'Пациент с ID = {ids} имеет {nums} группу аномалий')
+    elif nums in [2,3,4]:
+        st.subheader(f'Пациент с ID = {ids} имеет {nums} группы аномалий')
+    elif nums >=5:
+        st.subheader(f'Пациент с ID = {ids} имеет {nums} групп аномалий')
+    else:
+        st.subheader(f'Пациент с ID = {ids} не имеет аномалий!')
+    
 
 st.set_page_config("Fit_Predict Cardiospike demo")
 st.image("https://i.ibb.co/Vwhhs7J/image.png", width=150)
@@ -75,9 +85,9 @@ else:
     file_buffer = st.file_uploader(label = 'Выберите датасет')
     if file_buffer:
         try:
-            if '.csv' in file_buffer:
+            if '.csv' in file_buffer.name:
                 df = pd.read_csv(file_buffer, encoding=None)
-            elif '.xls' in file_buffer:
+            elif '.xls' in file_buffer.name:
                 df = pd.read_excel(file_buffer)
             if 'id' not in df.columns and df[df['time']==0].shape[0] == 1:
                 df['id'] = 1
