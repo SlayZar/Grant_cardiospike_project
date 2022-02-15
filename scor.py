@@ -88,7 +88,7 @@ else:
         if '.csv' in file_buffer.name:
             df = pd.read_csv(file_buffer, encoding=None)
         elif '.xls' in file_buffer.name:
-            df = pd.read_excel(file_buffer)
+            df = pd.read_excel(file_buffer,engine='openpyxl')
             st.write('b')
         if 'id' not in df.columns and df[df['time']==0].shape[0] == 1:
             df['id'] = 1
