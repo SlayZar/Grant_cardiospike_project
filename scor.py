@@ -84,7 +84,7 @@ if options == 'Тестовый датасет':
 else:
     file_buffer = st.file_uploader(label = 'Выберите датасет')
     st.write('Формат датасета: csv или xlsx')
-    st.write('Колонки датасета: time, x, id (опционально для случая с более одной ритмограммой)')
+    st.write('Колонки датасета: time, x, id (если более одной ритмограммы)')
     if file_buffer:
         try:
             if '.csv' in file_buffer.name:
