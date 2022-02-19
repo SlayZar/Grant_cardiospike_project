@@ -8,7 +8,7 @@ from preprocessing import features
 
 
 @st.cache(suppress_st_warning=True)
-def scoring(test_df, path_to_model, new_cols2, tresh, target_col='pred2_bin'):
+def scoring(test_df, path_to_model, tresh, target_col='pred2_bin'):
     df_test = test_df[['id', 'time', 'x']].copy()
     data2 = pd.DataFrame()
     for ids in list(test_df.id.unique()):
@@ -16,7 +16,7 @@ def scoring(test_df, path_to_model, new_cols2, tresh, target_col='pred2_bin'):
         data2 = data2.append(features(df.copy()))
     cb = CatBoostClassifier()
     cb.load_model(path_to_model)
-    test_df['probability'] = cb.predict_proba(Pool(data2[new_cols2]))[:,1].astype(float)
+    test_df['probability'] = cb.predict_proba(Pool(data2[cb.feature_names_]))[:,1].astype(float)
     test_df[target_col] = (test_df['probability'] > tresh).astype(int)
     df_test = df_test.merge(test_df[['id', 'time', 'x', 'probability', target_col]], 
                           on =['id', 'time', 'x'], how='left')
@@ -62,7 +62,6 @@ st.image("https://i.ibb.co/Vwhhs7J/image.png", width=150)
 if st.sidebar.button('Очистить кэш'):
     st.caching.clear_cache()
 
-new_cols2 = joblib.load('models/features')
 tresh = 0.393
 data_path = 'data/test.csv'
 target_col_name = 'prediction'
@@ -75,7 +74,7 @@ options = st.selectbox('Какие данные скорить?',
 if options == 'Тестовый датасет':
     df = pd.read_csv('data/test.csv')
     df.sort_values(by=['id', 'time'], inplace=True)
-    res = scoring(df, 'models/best_model', new_cols2, tresh, target_col = target_col_name)
+    res = scoring(df, 'models/best_model', tresh, target_col = target_col_name)
     st.markdown('### Скоринг завершён успешно!')
 
     st.markdown(get_table_download_link(res), unsafe_allow_html=True)
@@ -99,7 +98,7 @@ else:
         st.markdown('#### Файл корректный!')  
         st.write('Пример данных из файла:')
         st.dataframe(df.sample(3))  
-        res = scoring(df, 'models/best_model', new_cols2, tresh, target_col = target_col_name)
+        res = scoring(df, 'models/best_model', tresh, target_col = target_col_name)
         st.markdown('### Скоринг завершён успешно!')
 
         st.markdown(get_table_download_link(res), unsafe_allow_html=True)
