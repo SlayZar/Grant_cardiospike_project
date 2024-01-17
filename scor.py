@@ -13,7 +13,7 @@ def scoring(test_df, path_to_model, tresh, target_col='pred2_bin'):
     data2 = pd.DataFrame()
     for ids in list(test_df.id.unique()):
         df = test_df[test_df.id == ids]
-        data2 = data2.append(features(df.copy()))
+		data2 = pd.concat([data2, features(df.copy())])
     cb = CatBoostClassifier()
     cb.load_model(path_to_model)
     test_df['probability'] = cb.predict_proba(Pool(data2[cb.feature_names_]))[:,1].astype(float)
